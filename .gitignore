@@ -1,0 +1,6 @@
+*.pyc
+.env
+.vscode/
+.DS_Store
+.idea
+.python-version
