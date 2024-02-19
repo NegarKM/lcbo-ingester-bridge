@@ -1,6 +1,8 @@
 import os
 import json
+from datetime import datetime
 from settings.config import Config
+from drink_data_publisher import LCBODrinkPublisher
 
 FILE_PATH = Config.LCBO_FILES_PATH
 
@@ -16,11 +18,7 @@ def read_files(path):
                 with open(file_path, 'r') as file:
                     try:
                         json_content = json.load(file)
-
-                        print(f"Attributes and values in {file_name}:")
-                        for key, value in json_content.items():
-                            print(f"{key}: {value}")
-
+                        publisher.produce(json_content)
                     except json.JSONDecodeError as e:
                         print(f"Error decoding JSON in {file_name}: {e}")
 
@@ -28,4 +26,12 @@ def read_files(path):
         print(f"Error reading files in {path}: {e}")
 
 
+RUN_DATE = Config.RUN_DATE
+if not RUN_DATE:
+    date = str(datetime.now().date())
+    print(f"date: {date}")
+    print(f"Run date is not passed. The default date is {date}")
+    RUN_DATE = date
+publisher = LCBODrinkPublisher()
+FILE_PATH = FILE_PATH + "/" + RUN_DATE
 read_files(FILE_PATH)

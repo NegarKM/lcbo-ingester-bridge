@@ -6,17 +6,9 @@ POLL_TIMEOUT = 10  # Amount of time to poll of responses in seconds
 
 class Producer:
     def __init__(self):
-        kafka_servers = Config.KAFKA_CLUSTER_BOOTSTRAP_SERVERS
-        api_key = Config.WRITER_API_KEY
-        api_secret = Config.WRITER_API_SECRET
-        self.servers = kafka_servers
+        kafka_servers = [Config.KAFKA_CLUSTER_BOOTSTRAP_SERVERS]
         self.conf = {
-            "bootstrap.servers": ",".join(self.servers),
-            "compression.type": "snappy",
-            "sasl.mechanism": "PLAIN",
-            "security.protocol": "sasl_ssl",
-            "sasl.username": api_key,
-            "sasl.password": api_secret,
+            "bootstrap.servers": ",".join(kafka_servers),
         }
         self.producer = kafka.Producer(self.conf)
         self.sent = 0
