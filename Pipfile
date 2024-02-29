@@ -8,7 +8,6 @@ confluent-kafka = "*"
 pytest="8.0.2"
 
 [dev-packages]
-pytest="8.0.2"
 
 [requires]
 python_version = "3.11"
