@@ -4,7 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-confluent_kafka = "*"
+confluent-kafka = "*"
+pytest="8.0.2"
 
 [dev-packages]
 
