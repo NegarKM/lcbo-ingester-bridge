@@ -3,8 +3,8 @@ import json
 
 from producer import Producer
 
-topic = "lcbo-test-events"
-# topic = "lcbo-drinks-data"
+# topic = "lcbo-test-events"
+topic = "lcbo-drinks-data"
 
 
 class LCBODrinkPublisher:

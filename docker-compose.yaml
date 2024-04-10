@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+#  zookeeper:
+#    image: zookeeper
+#    hostname: zookeeper
+#    container_name: con_zookeeper
+
+#  kafka:
+#    image: confluentinc/cp-kafka
+#    hostname: kafka
+#    container_name: con_kafka
+#    environment:
+#      KAFKA_ZOOKEEPER_CONNECT: zookeeper
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+#      KAFKA_DEFAULT_REPLICATION_FACTOR: 1
+#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+#    depends_on:
+#      - zookeeper
+
+  kafka-cluster:
+    image: landoop/fast-data-dev
+    environment:
+      ADV_HOST: kafka-cluster
+      RUNTESTS: 0
+      FORWARDLOGS: 0
+      SAMPLEDATA: 0
+    ports:
+      - "3030:3030"
+
+  myapp:
+    build: .
+    container_name: con_myapp
+    environment:
+      KAFKA_CLUSTER_BOOTSTRAP_SERVERS: kafka-cluster:9092
+      LCBO_FILES_PATH: /app/etc/drinks
+    volumes:
+      - type: bind
+        source: "${LCBO_FILES_PATH}"
+        target: /app/etc/drinks
+    depends_on:
+      - kafka-cluster
+    command: ./start.sh 2023-12-14

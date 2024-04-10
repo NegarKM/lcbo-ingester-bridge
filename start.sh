@@ -10,6 +10,6 @@ if [ -f .env ]; then
     export $(cat .env | grep -v '^#' | xargs)
 fi
 
-RUN_DATE=$1
+export RUN_DATE=$1
 
-python3 src/main.py
+$VENV_PATH/bin/python3 -u src/main.py

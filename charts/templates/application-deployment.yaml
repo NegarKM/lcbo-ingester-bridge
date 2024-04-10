@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lcbo-ingester-bridge-deployment
+  labels:
+    name: lcbo-ingester-bridge
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: lcbo-ingester-bridge
+  template:
+    metadata:
+      labels:
+        name: lcbo-ingester-bridge
+    spec:
+      containers:
+        - name: lcbo-ingester-bridge
+          image: lcbo-ingester-bridge
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+              name: http
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1250Mi
+            limits:
+              cpu: 1250m
+              memory: 2250Mi
+          env:
+            - name: KAFKA_CLUSTER_BOOTSTRAP_SERVERS
+              value: "kafka:9092"
+            - name: LCBO_FILES_PATH
+              value: "/app/etc/drinks"
+          command: [ "./start.sh" ]
+          args: [ "2023-12-14" ]
+          volumeMounts:
+            - mountPath: /app/etc/drinks
+              name: lcbo-files-path
+      volumes:
+        - name: lcbo-files-path
+          hostPath:
+            path: /Users/negar/work/projects/lcbo-scraper/etc/files/drinks

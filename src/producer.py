@@ -8,13 +8,13 @@ class Producer:
     def __init__(self):
         kafka_servers = [Config.KAFKA_CLUSTER_BOOTSTRAP_SERVERS]
         self.conf = {
-            "bootstrap.servers": ",".join(kafka_servers),
+            "bootstrap.servers": ",".join(kafka_servers)
         }
         self.producer = kafka.Producer(self.conf)
         self.sent = 0
 
     def send(self, topic: str, key: str, value) -> None:
-        print(f"sending data (key={key}, value={value}) to topic {topic}")
+        print(f"sending data (key={key}, value={value}) to topic {topic}, kafka: {self.conf}")
 
         def on_delivery(err, msg) -> None:
             """

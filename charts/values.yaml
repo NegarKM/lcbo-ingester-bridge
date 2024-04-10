@@ -1,0 +1,5 @@
+---
+application:
+  env:
+    kafka_servers:
+    lcbo_files_path:
