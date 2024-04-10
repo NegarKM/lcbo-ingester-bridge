@@ -1,0 +1,43 @@
+ARG PYTHON_VERSION=3.11.4
+FROM python:${PYTHON_VERSION}-slim as base
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED=1
+
+FROM base AS python-deps
+
+# Install pipenv and compilation dependencies
+RUN pip install --upgrade pip==24.0 \
+    && pip install pipenv
+
+# Install python dependencies in /.venv
+RUN --mount=type=bind,source=./Pipfile,target=Pipfile \
+    PIPENV_VENV_IN_PROJECT=1 pipenv install
+
+
+FROM base AS runtime
+
+WORKDIR /app
+
+# Copy virtual env from python-deps stage
+COPY --from=python-deps /.venv .venv
+ENV PATH=".venv/bin:$PATH"
+
+# Create a non-privileged user that the app will run under.
+ARG UID=10001
+RUN adduser \
+    --disabled-password \
+    --gecos "" \
+    --home "/nonexistent" \
+    --shell "/sbin/nologin" \
+    --no-create-home \
+    --uid "${UID}" \
+    appuser
+USER appuser
+
+# Install application into container
+COPY src src
+COPY start.sh start.sh
+
+# Run the application
+CMD ["/bin/bash"]
