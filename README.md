@@ -14,10 +14,25 @@ docker-compose up
 ```
 
 ### KinD
-
+Use Kind to run a multi-node Kubernetes Cluster. Create a yaml file with the following content:
+```
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+- role: worker
+- role: worker
+- role: worker
+```
+Run this command to create the cluster:
+```
+kind create cluster --config kind-example-config.yaml
+```
+To deploy and run lcbo-ingester-bridge on Kubernetes on your local system:
 ```
 cd nfs
 docker build -t nfs-storage .
+cd ..
 kind load docker-image nfs-storage:latest
 kubectl apply -f charts/storage
 
