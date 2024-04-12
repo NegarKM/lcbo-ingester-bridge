@@ -16,7 +16,8 @@ docker-compose up
 ### KinD
 
 ```
-docker build -t nfs-storage -f nfs/Dockerfile .
+cd nfs
+docker build -t nfs-storage .
 kind load docker-image nfs-storage:latest
 kubectl apply -f charts/storage
 
