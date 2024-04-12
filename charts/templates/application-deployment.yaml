@@ -5,7 +5,6 @@ metadata:
   labels:
     name: lcbo-ingester-bridge
 spec:
-  replicas: 3
   selector:
     matchLabels:
       name: lcbo-ingester-bridge
@@ -36,9 +35,10 @@ spec:
           command: [ "./start.sh" ]
           args: [ "2023-12-14" ]
           volumeMounts:
-            - mountPath: /app/etc/drinks
-              name: lcbo-files-path
+            - name: lcbo-files-path
+              mountPath: /app/etc/drinks
       volumes:
         - name: lcbo-files-path
-          hostPath:
-            path: /Users/negar/work/projects/lcbo-scraper/etc/files/drinks
+          nfs:
+            server: "nfs-service.default.svc.cluster.local"
+            path: "/export/data/drinks" # "data" folder must exist inside "/exports" directory of NFS server
