@@ -16,15 +16,16 @@ docker-compose up
 ### KinD
 
 ```
-docker build -t nfs-storage nfs/Dockerfile .
+docker build -t nfs-storage -f nfs/Dockerfile .
 kind load docker-image nfs-storage:latest
 kubectl apply -f charts/storage
 
 docker build -t lcbo-ingester-bridge .
 kind load docker-image lcbo-ingester-bridge:latest
 kubectl apply -f charts/templates
-
-
+```
+Clean Up
+```
 kubectl delete -f charts/templates
 kubectl delete -f charts/storage
 ```
