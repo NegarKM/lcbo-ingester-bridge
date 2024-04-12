@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: lcbo-ingester-bridge-deployment
+  name: lcbo-ingester-bridge
   labels:
     name: lcbo-ingester-bridge
 spec:
@@ -29,7 +29,7 @@ spec:
               memory: 2250Mi
           env:
             - name: KAFKA_CLUSTER_BOOTSTRAP_SERVERS
-              value: "kafka:9092"
+              value: "kafka-service:9092"
             - name: LCBO_FILES_PATH
               value: "/app/etc/drinks"
           command: [ "./start.sh" ]
